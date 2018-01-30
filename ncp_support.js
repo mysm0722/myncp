@@ -1,13 +1,17 @@
-
+// Node Module 
 const https = require('https');
 const express = require('express');
+// JSON Parser
 const bodyParser = require('body-parser');
+
 const fs = require('fs');
+// LINE Bot Message Reply Module
 const reply = require('./reply');
 
+// Create Express Server 
 var app = express();
 
-// set SSL
+// SSL File Settings
 var https_options = {
     ca: fs.readFileSync('/etc/letsencrypt/live/bot.mycloud1.ga/chain.pem', 'utf8'),
     key: fs.readFileSync('/etc/letsencrypt/live/bot.mycloud1.ga/privkey.pem', 'utf8'),
@@ -16,11 +20,13 @@ var https_options = {
 
 app.use(bodyParser.json());
 
+// BOT Hooking API Setting
 app.get('/webhook', function (reqeust, response) {
     response.writeHead(200, {'Content-Type' : 'text/html'});
     response.end('<h1>Changhwan - mysm0722@naver.com<h1>');
 });
 
+// @help message
 var helpText =
     "[ NCP Bot Help ] \n" +
     "@ncp : call hello ncp \n" +
@@ -36,6 +42,7 @@ var helpArrayText = [
     }
 ];
 
+// @guide message
 var guideUrlText =
     "[ NCP User Guide ]\n" +
     "NCP User Guide : http://docs.ncloud.com/ko/\n"; 
@@ -47,6 +54,7 @@ var guideUrlArrayText = [
     }
 ];
 
+// @portal message
 var portalUrlText =
     "[ NCP Portal Site ]\n" +
     "NCP Portal Site : http://www.ncloud.com/\n"; 
@@ -58,6 +66,7 @@ var portalUrlArrayText = [
     }
 ];
 
+// error message
 var errorText =
     "Hi~ This NCP LINE Bot.\nThis Command is not supported.\n";
 
@@ -68,27 +77,25 @@ var errorArrayText = [
     }
 ];
 
+// Send Bot Web Hooking Message 
 app.post('/webhook', function (request, response) {
 
     var eventObj = request.body.events[0];
     var source = eventObj.source;
     var message = eventObj.message;
 
-    var CHANNEL_ACCESS_TOKEN = 'Mqw0wduN0NeUQElYF2jmwGpWoa0Llpki52yOfyTCVbCmD2zQZXXi2Lqyo0jWrzXjha2GYtkLqmZouslQU23XjazFuuWo6DRbJkhHZga1Aqdnfl0sEguwqmtMoIHAC+I44ecGCXjORMBW5gdGPW+LiQdB04t89/1O/w1cDnyilFU=';
+    var CHANNEL_ACCESS_TOKEN = '{YOUR_CHANNEL_TOKEN}';
 
     // request log
     console.log('======================', new Date() ,'======================');
     console.log('[request]', request.body);
     console.log('[request source] ', eventObj.source);
-    console.log('[request message]', eventObj.message);
-
-	console.log(/^@.+/g.test(message.text));	
+    console.log('[request message]', eventObj.message);	
     
+    // Message Switcher
     if(message.type = "text" && message.text.indexOf("@ncp") != -1){
         reply.send(CHANNEL_ACCESS_TOKEN, eventObj.replyToken, errorArrayText );
-    }
-    //else if(message.type = "text" && /^@.+/g.test(message.text)){
-	else {
+    } else {
         var cmd = message.text.split('@')[1];
         console.log('[command]', cmd);
 

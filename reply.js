@@ -3,7 +3,6 @@ const requestSender = require('request');
 
 module.exports.send = function (channelAccessToken, replyToken, messages) {
 
-
 	console.log('reply.channelAccessToken : ' + channelAccessToken);
 	console.log('reply.replyToken : ' + replyToken);
 	console.log('reply.messages : ' + messages);
@@ -13,6 +12,7 @@ module.exports.send = function (channelAccessToken, replyToken, messages) {
         'Authorization' : 'Bearer ' + channelAccessToken
     };
 
+    // LINE Bot Reply Server URL
     var options = {
         url: 'https://api.line.me/v2/bot/message/reply',
         method: 'POST',
@@ -23,6 +23,7 @@ module.exports.send = function (channelAccessToken, replyToken, messages) {
         }
     };
 
+    // LINE Bot Reploy Request/Response
     requestSender(options, function (error, response, body) {
 
 		console.log('req.Sender.options : ' + options);
